@@ -65,7 +65,7 @@
 
 
                   <?php if(message()):?>
-                    <div class="alert alert-danger text-center"><?=message('',true)?></div>
+                    <div class="alert alert-success text-center"><?=message('',true)?></div>
                   <?php endif;?>
 
                    <?php if(!empty($errors['email'])):?>
@@ -73,12 +73,12 @@
                   <?php endif;?>
 
 
-                  <form method="post" class="row g-3 needs-validation" novalidate>
+                  <form id="form" class="row g-3 needs-validation" novalidate>
 
                     <div class="col-12">
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">Email</span>
-                        <input value="<?= set_value('email')?>" type="text" name="email" class="form-control" id="yourUsername" required1>
+                        <input value="<?= set_value('email')?>" type="text" id="email" name="email" class="form-control" id="yourUsername" required1>
                         <div class="invalid-feedback">Please enter your email.</div>
 
                       </div>
@@ -86,15 +86,8 @@
 
                     <div class="col-12">
                       <label for="yourPassword" class="form-label">Password</label>
-                      <input value="<?= set_value('password')?>" type="password" name="password" class="form-control" id="yourPassword" required1>
+                      <input value="<?= set_value('password')?>" type="password" name="password" class="form-control" id="password" required1>
                       <div class="invalid-feedback">Please enter your password!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
-                        <label class="form-check-label" for="rememberMe">Remember me</label>
-                      </div>
                     </div>
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Login</button>
@@ -140,16 +133,20 @@
   <script src="<?=ROOT?>/niceadmin/assets/js/main.js"></script>
 <script>
 
+        const loginForm = document.forms[0];
+;
+        const loginButton = document.getElementById("login");
+        const email = document.getElementById('email')
+        const password = document.getElementById('password')
 
 loginForm.addEventListener('submit', async (e) => {
 
 e.preventDefault();
-
-const response = await fetch('http://localhost/rest-api-with-mvc/public/login', {
+const response = await fetch('http://localhost/rest-api-with-mvc/public/login1', {
     method: 'POST',
     body: JSON.stringify({
-        username: loginForm.username.value,
-        password: loginForm.password.value
+        email: email.value,
+        password: password.value
     })
 });
 
@@ -157,15 +154,9 @@ const json = await response.text();
 const obj = JSON.parse(json);
 
 if (response.status == 200) {
-
     localStorage.setItem("access_token", obj.access_token);
     localStorage.setItem("refresh_token", obj.refresh_token);
-
-    loginForm.style.display = "none";
-    logoutButton.style.display = "block";
-    getTasksButton.style.display = "block";
-    add.style.display = "block";
-
+    window.location.assign('http://localhost/rest-api-with-mvc/public/home');
 
 } else {
     alert(obj.message);

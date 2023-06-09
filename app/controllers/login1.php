@@ -12,6 +12,7 @@ class Login1 extends Controller
     public function index(){
        $db = new Database();
        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      
 
             $data = json_decode(file_get_contents("php://input"), true);
  
@@ -20,59 +21,61 @@ class Login1 extends Controller
                   array_key_exists("password", $data)) {
                      $user = new User();
                      $user = $user->first(['email'=> $data['email']]);
+                     if(!$user == null){
+                        
+                    
                   if($user->password == $data['password']){
                      $payload = [ "id" => $user->id,"name" => $user->name,"exp"=> time() + 4000];
                      $expiry =432000;
                       $refresh =["id" => $user->id,"exp" => time() + 432000];
 
-                     $auth = new Auth();
-                     $auth->authenticate($user);
-
+                     // $auth = new Auth();
+                     // $auth->authenticate($user);
+                        //   show($user->password);
+                        //   return;
                      $jwt = new Jwt();
                     $access_token = $jwt->encode($payload);
                     $refresh_token = $jwt->encode($refresh);
                     echo json_encode(["access_token" => $access_token,"refresh_token" => $refresh_token]);
-                     return;
-                   
+                    return;
                   }else{
-                     http_response_code(401);
                         echo json_encode(["message" => "invalid authentication"]);
-                        exit;
+                        http_response_code(401);
+                         $this->errors['password']="the password is invalid";
+                        return;
                   }
-               //   echo json_encode(["message" => "password and email exists"]);
-               //   return;
-            }
-    // $user = $user_gateway->getByUsername($data["username"]);
-    
-    // if ($user === false) {
-        
-    //     http_response_code(401);
-    //     echo json_encode(["message" => "invalid authentication"]);
-    //     exit;
-    }
-//     $name ='arif qasemi';
-//       $user = new User();
-//      $user = $user->where(['name'=> $name]);
-//   if($user ==null){
-//    echo "it is null";
-//   }else{
-//    show($user);
-//   }
-    // if ( ! password_verify($data["password"], $user["password_hash"])) {
-        
-    //     http_response_code(401);
-    //     echo json_encode(["message" => "invalid authentication"]);
-    //     exit;
-    // }
-    // $secret_key ="5A7134743777217A25432646294A404E635266556A586E3272357538782F413F";
-    // $expiry =432000;
-    // require __DIR__ . "/tokens.php";
-    
-    // $refresh_token_gateway = new RefreshTokenGateway($database,$secret_key);
-    // $refresh_token_gateway->create($refresh_token,$expiry);
+             
+            }else{
+                   echo json_encode(["message" => "wrong email"]);
+                   http_response_code(401);
 
+                   $this->errors['password']="the password is invalid";
+
+                 return;
+            }
+          }
+
+         
+
+    }
 
 
        $this->view('login');
     }
+
+
+
+
+
+    public function accessToken(){
+
+      if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+         $codec = new Jwt();
+         $auth = new Auth($codec);
+        $access_token1 = $auth->authenticateAccessToken();
+      // $header = apache_request_headers();
+     show($access_token1);
+    }
+   }
 }

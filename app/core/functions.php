@@ -46,3 +46,24 @@ function set_value($key, $default = '')
 
 	return '';
 }
+
+
+
+function set_checked($key, $value, $default = '')
+{
+
+	if(!empty($_POST[$key]))
+	{
+		if($value == $_POST[$key]){
+			return ' checked ';
+		}
+	}else
+	if(!empty($default))
+	{
+		if($value == $default){
+			return ' checked ';
+		}
+	}
+
+	return '';
+}

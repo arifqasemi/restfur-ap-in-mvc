@@ -38,11 +38,13 @@
 </head>
 
 <body>
-
+   <?php if(!empty($row)):?>
+      <?=$row?>
+      <?php endif;?>
 
   <main>
     <div class="container">
-
+  
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
           <div class="row justify-content-center">
@@ -86,21 +88,12 @@
                       <input value="<?= set_value('password')?>" type="password" name="password" class="form-control <?=!empty($errors['password']) ? 'border-danger':'';?>" id="yourPassword" required>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label">Retype Password</label>
-                      <input value="<?= set_value('retype_password')?>" type="password" name="retype_password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please retype your password!</div>
-
-                      <?php if(!empty($errors['password'])):?>
-                        <small class="text-danger"><?=$errors['password']?></small>
-                      <?php endif;?>
-
-                    </div>
+               
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Create Account</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="<?=ROOT?>/login">Log in</a></p>
+                      <p class="small mb-0">Already have an account? <a href="<?=ROOT?>/login1">Log in</a></p>
                     </div>
                   </form>
 

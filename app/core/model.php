@@ -42,8 +42,8 @@ public function update($id,$data){
         $query .= $key ."=:" . $key . ","; 
     }
     $query = trim($query,",");
-    $query .= " where user_id = :user_id ";
-    $data['user_id']=$id;
+    $query .= " where id = :id ";
+    $data['id']=$id;
     // show($query);
     // return;
     $this->query($query,$data);
@@ -61,7 +61,8 @@ public function where($data){
     }
 
     $query = trim($query,"&& ");
-
+    // show($query);
+    // return;
    $res = $this->query($query,$data);
 
    return $res;
@@ -70,13 +71,25 @@ public function where($data){
 
 
 
-public function delete(){
-    
-}
+public function delete(int $id)
+	{
+
+		$query = "delete from ".$this->table." where id = :id limit 1";
+		$this->query($query,['id'=>$id]);
+
+		return true;
+
+	}
 
 
 
 public function findAll(){
+
+    $query ="select * from ".$this->table;
+   
+
+    $res = $this->query($query);
+    return $res;
     
 }
 
@@ -91,7 +104,10 @@ public function first($data){
     $query .= " order by id $this->order limit 1";
 
     $res = $this->query($query,$data);
+    if(is_array($res))
+		{
     return $res[0];
+        }
 }
 
 }

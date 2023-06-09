@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 use App\Core\Model;
+use App\Core\Exception;
 
 class Auth extends Model
 {
@@ -8,29 +9,13 @@ class Auth extends Model
 
     public $user_id;
 
-
-
-    public function authenticate($data){
-        if(is_object($data)){
-        $_SESSION['user']=$data;
-
-        }
-
-    }
-    public function logout(){
-        unset($_SESSION['user']);
-        redirect('login');
+    public function __construct($codec)
+    {
+        $this->codec =$codec;
     }
 
-
-    public function logged_in(){
-        if(!empty($_SESSION['USER_DATA']))
-		{
-			return true;
-		}
-
-		return false;
-    }
+  
+  
 
 
 
@@ -68,7 +53,7 @@ class Auth extends Model
     }
 
 
-    public function authenticateAccessToken(): bool
+    public function authenticateAccessToken()
     {
         if ( ! preg_match("/^Bearer\s+(.*)$/", $_SERVER["HTTP_AUTHORIZATION"], $matches)) {
             http_response_code(400);

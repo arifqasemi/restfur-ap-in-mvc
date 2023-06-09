@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 spl_autoload_register(function($class_name)
 {
 	$parts = explode("\\", $class_name);
@@ -21,3 +23,6 @@ require "database.php";
 require "model.php";
 require "controller.php";
 require "route.php";
+require "errorhandler.php";
+require "exception.php";
+
